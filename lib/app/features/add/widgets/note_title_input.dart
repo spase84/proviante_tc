@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes/app/features/widgets/decorated_input_container.dart';
 import 'package:notes/app/settings/colors.dart';
 
-class NoteInput extends StatelessWidget {
+class NoteInput extends StatefulWidget {
   NoteInput({
     required this.title,
     required this.onChanged,
@@ -14,22 +14,32 @@ class NoteInput extends StatelessWidget {
   final String title;
   final String? initialValue;
 
+  @override
+  State<NoteInput> createState() => _NoteInputState();
+}
+
+class _NoteInputState extends State<NoteInput> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.initialValue ?? '';
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _controller.text = initialValue ?? '';
     return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title),
+          Text(widget.title),
           const SizedBox(height: 16),
           DecoratedInputContainer(
             child: TextFormField(
               controller: _controller,
-              onChanged: onChanged,
+              onChanged: widget.onChanged,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: AppColors.textGray),
@@ -41,9 +51,10 @@ class NoteInput extends StatelessWidget {
               minLines: 1,
               maxLines: 15,
               textAlignVertical: TextAlignVertical.center,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
               textCapitalization: TextCapitalization.sentences,
               keyboardAppearance: Brightness.dark,
+              textInputAction: TextInputAction.newline,
               autofocus: true,
             ),
           ),
