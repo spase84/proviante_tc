@@ -9,5 +9,14 @@ abstract class  LocaleKeys {
   static const editNoteTitle = 'editNoteTitle';
   static const noteNameTitle = 'noteNameTitle';
   static const noteContent = 'noteContent';
+  static const noteContextTitle = 'noteContextTitle';
+  static const save = 'save';
+  static const update = 'update';
+  static const delete = 'delete';
+  static const titleCantBeEmpty = 'titleCantBeEmpty';
+  static const createdAt = 'createdAt';
+  static const updatedAt = 'updatedAt';
+  static const emptyListText = 'emptyListText';
+  static const emptyListDescription = 'emptyListDescription';
 
 }

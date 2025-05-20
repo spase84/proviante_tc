@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:notes/app/domain/entities/note.dart';
 import 'package:notes/app/features/add/add_screen.dart';
 import 'package:notes/app/features/list/list_screen.dart';
 import 'package:notes/app/settings/routes.dart';
@@ -16,7 +15,7 @@ final router = GoRouter(
       name: Routes.add,
       path: '/add',
       builder: (context, state) => AddScreen(
-        note: state.extra as Note?,
+        noteId: state.extra as int?,
       ),
     ),
   ],

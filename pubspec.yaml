@@ -28,6 +28,7 @@ dependencies:
 
   # UI
   infinite_scroll_pagination: 4.1.0
+  flutter_slidable: ^4.0.0
 
   # Database
   isar: *isar_version

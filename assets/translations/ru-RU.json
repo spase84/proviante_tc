@@ -4,5 +4,14 @@
     "addNoteTitle": "Добавить заметку",
     "editNoteTitle": "Редактировать заметку",
     "noteNameTitle": "Название заметки",
-    "noteContent": "Заметка"
+    "noteContent": "Заметка",
+    "noteContextTitle": "Описание",
+    "save": "Сохранить",
+    "update": "Обновить",
+    "delete": "Удалить",
+    "titleCantBeEmpty": "Название заметки не может быть пустым",
+    "createdAt": "Создано",
+    "updatedAt": "Обновлено",
+    "emptyListText": "Список заметок пуст",
+    "emptyListDescription": "Добавьте первую заметку, нажав на + в верхнем правом углу экрана."
 }

@@ -1,8 +1,8 @@
 import 'package:kiwi/kiwi.dart';
-import 'package:notes/app/features/list/data/datasource/isar_datasource.dart';
-import 'package:notes/app/features/list/data/datasource/note_datasource.dart';
-import 'package:notes/app/features/list/data/repository/note_repository_impl.dart';
-import 'package:notes/app/features/list/domain/repository/note_repository.dart';
+import 'package:notes/app/data/datasource/isar_datasource.dart';
+import 'package:notes/app/data/datasource/note_datasource.dart';
+import 'package:notes/app/data/repository/note_repository_impl.dart';
+import 'package:notes/app/domain/repository/note_repository.dart';
 
 part 'injector.g.dart';
 

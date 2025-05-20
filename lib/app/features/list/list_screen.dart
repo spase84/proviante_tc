@@ -15,22 +15,30 @@ class ListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(LocaleKeys.listScreenTitle).tr(),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: IconButton(
-              icon: const Icon(Icons.add, color: AppColors.secondary),
-              onPressed: () => context.pushNamed(Routes.add),
+    return BlocProvider<ListScreenCubit>(
+      create: (context) => ListScreenCubit()..init(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(LocaleKeys.listScreenTitle).tr(),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Builder(builder: (context) {
+                return IconButton(
+                  icon: const Icon(Icons.add, color: AppColors.secondary),
+                  onPressed: () async {
+                    await context.pushNamed(Routes.add);
+                    if (!context.mounted) {
+                      return;
+                    }
+                    context.read<ListScreenCubit>().refresh();
+                  },
+                );
+              }),
             ),
-          ),
-        ],
-      ),
-      body: BlocProvider<ListScreenCubit>(
-        create: (context) => ListScreenCubit()..init(),
-        child: const _ListScreenBody(),
+          ],
+        ),
+        body: const _ListScreenBody(),
       ),
     );
   }
@@ -43,51 +51,75 @@ class _ListScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ListScreenCubit, ListScreenState>(
       listener: (context, state) {
-        // TODO: if error we should show snackbar
+        if (state is ListScreenStateError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.failure.message)),
+          );
+        }
       },
       buildWhen: (_, state) => state is! ListScreenStateSuccess,
-      builder: (context, state) {
-        return switch (state) {
-          ListScreenStateInitial() =>
-            const Center(child: CircularProgressIndicator()),
-          ListScreenStateError(failure: final failure) =>
-            Center(child: Text(failure.message)),
-          ListScreenStateSuccess(pagingController: final pagingController) =>
-            RefreshIndicator(
-              onRefresh: () async => pagingController.refresh(),
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: PagedSliverList.separated(
-                      pagingController: pagingController,
-                      builderDelegate: PagedChildBuilderDelegate<Note>(
-                        firstPageProgressIndicatorBuilder: (_) => const Center(
-                          child: CircularProgressIndicator(
-                            strokeCap: StrokeCap.round,
-                          ),
+      builder: (context, state) => switch (state) {
+        ListScreenStateInitial() =>
+          const Center(child: CircularProgressIndicator()),
+        ListScreenStateError(failure: final failure) =>
+          Center(child: Text(failure.message)),
+        ListScreenStateSuccess(pagingController: final pagingController) =>
+          RefreshIndicator(
+            onRefresh: () async => pagingController.refresh(),
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: PagedSliverList.separated(
+                    pagingController: pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<Note>(
+                      firstPageProgressIndicatorBuilder: (_) => const Center(
+                        child: CircularProgressIndicator(
+                          strokeCap: StrokeCap.round,
                         ),
-                        noItemsFoundIndicatorBuilder: (context) => Column(
+                      ),
+                      noItemsFoundIndicatorBuilder: (context) =>
+                          SizedBox.expand(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              color: Colors.amber,
-                              height: 100,
+                            Text(LocaleKeys.emptyListText,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge)
+                                .tr(),
+                            const SizedBox(height: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 32),
+                              child: Text(
+                                LocaleKeys.emptyListDescription,
+                                style: Theme.of(context).textTheme.labelSmall,
+                                textAlign: TextAlign.center,
+                              ).tr(),
                             ),
                           ],
                         ),
-                        itemBuilder: (context, item, i) => ListItem(
-                          note: item,
-                          onTap: () =>
-                              context.pushNamed(Routes.add, extra: item),
-                        ),
                       ),
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      itemBuilder: (context, item, i) => ListItem(
+                        note: item,
+                        onTap: () async {
+                          await context.pushNamed(Routes.add, extra: item.id);
+                          if (!context.mounted) {
+                            return;
+                          }
+                          context.read<ListScreenCubit>().refresh();
+                        },
+                        onDelete: () {
+                          context.read<ListScreenCubit>().deleteNote(item.id!);
+                        },
+                      ),
                     ),
+                    separatorBuilder: (_, __) => const SizedBox(height: 16),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-        };
+          ),
       },
     );
   }

@@ -22,10 +22,10 @@ final darkTheme = ThemeData(
     ),
     bodyMedium: baseTextStyle,
     bodySmall: baseTextStyle.copyWith(
-      fontSize: 10,
+      fontSize: 14,
     ),
     labelSmall: baseTextStyle.copyWith(
-      fontSize: 14,
+      fontSize: 12,
       fontWeight: FontWeight.w500,
       color: AppColors.textGray,
     ),
@@ -44,22 +44,22 @@ final darkTheme = ThemeData(
   ),
   filledButtonTheme: FilledButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStateProperty.resolveWith<Color>(
-        (Set<WidgetState> states) {
-          if (states.contains(WidgetState.disabled)) {
-            return AppColors.backgroundGrey;
-          } else if (states.contains(WidgetState.pressed)) {
-            return AppColors.primary.withValues(alpha: 0.8);
-          }
-          return AppColors.primary;
-        },
-      ),
-      shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return AppColors.backgroundGrey;
+            } else if (states.contains(WidgetState.pressed)) {
+              return AppColors.primary.withValues(alpha: 0.8);
+            }
+            return AppColors.primary;
+          },
         ),
-      ),
-    ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        minimumSize: WidgetStateProperty.all<Size>(const Size.fromHeight(40))),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
@@ -82,6 +82,5 @@ const TextStyle baseTextStyle = TextStyle(
   fontFamily: '.SF UI Text',
   fontSize: 16.0,
   color: AppColors.textPrimary,
-  height: 1.375,
   fontWeight: FontWeight.w400,
 );

@@ -3,7 +3,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:notes/app/di/injector.dart';
 import 'package:notes/app/domain/entities/note.dart';
 import 'package:notes/app/features/list/domain/bloc/index.dart';
-import 'package:notes/app/features/list/domain/repository/note_repository.dart';
+import 'package:notes/app/domain/repository/note_repository.dart';
 import 'package:notes/app/settings/constants.dart';
 
 class ListScreenCubit extends Cubit<ListScreenState> {
@@ -31,5 +31,14 @@ class ListScreenCubit extends Cubit<ListScreenState> {
     } else {
       pagingController.appendPage(items, page + 1);
     }
+  }
+
+  void refresh() {
+    pagingController.refresh();
+  }
+
+  void deleteNote(int noteId) async {
+    await _repository.deleteNote(noteId);
+    pagingController.refresh();
   }
 }

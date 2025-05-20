@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:notes/app/domain/entities/note.dart';
-import 'package:notes/app/features/list/data/datasource/note_datasource.dart';
+import 'package:notes/app/data/datasource/note_datasource.dart';
 import 'package:path_provider/path_provider.dart';
 
 class IsarDatasource implements NoteDataSource {
@@ -16,9 +16,16 @@ class IsarDatasource implements NoteDataSource {
     final isar = await db;
     return isar.notes
         .where()
+        .sortByUpdatedAtDesc()
         .offset((page - 1) * pageSize)
         .limit(pageSize)
         .findAllSync();
+  }
+
+  @override
+  Future<Note?> getNote(int id) async {
+    final isar = await db;
+    return isar.notes.getSync(id);
   }
 
   @override
@@ -38,5 +45,11 @@ class IsarDatasource implements NoteDataSource {
     }
 
     return Future.value(Isar.getInstance());
+  }
+
+  @override
+  Future<bool> deleteNote(int id) async {
+    final isar = await db;
+    return isar.writeTxn(() => isar.notes.delete(id));
   }
 }
