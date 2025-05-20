@@ -1,16 +1,44 @@
-# notes
+# Proviante Test Case
+## _Приложение "Заметки"_
 
-A new Flutter project.
 
-## Getting Started
+## Структура
 
-This project is a starting point for a Flutter application.
+Приложение состоит из 2 экранов: 
+- главный экран ( список заметок )
+- экран добавления/редактирования заметки
 
-A few resources to get you started if this is your first Flutter project:
+## Функциональность
+- Добавление заметки
+- Редактирование заметки
+- Удаление заметки свайпом влево
+- Просмоте списка всех заметок. Список отсортирован по дате изменения ( если заметка не изменялась, то по дате создания) от последних к первым
+- Если заметок нет - отображается Empty State с подсказкой добаления заметки
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Tech
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+В проекте используются следующие технологии/пакеты:
+
+- BLOC - для управление состоянием экранов
+- Go Router - для обеспечения стека навигации
+- Easy Localization - для поддержки мультиязычности
+- Kiwi - в качестве контейнера зависимостей
+- Isar - в качестве базы данных 
+
+## Архитектура
+
+Проект выполнен в Clean Architecture. Общие репозитории и модели вынесены на верхний ( общий ) слой.
+Каждый экран выполнен отдельной Feature, со своей доменной логикой и представлением.
+Тема, роутер с маршрутами, цветовая палитра и константы вынесены в отдельный слой settings.
+
+## Установка
+
+Проект уже содержит все сгенерированные файлы, но если нужно запйстить кодогенерацию, выполните команду
+
+```sh
+dart run build_runner build --delete-conflicting-outputs
+```
+Для перегенерации файлов локализации выполните команду
+```sh
+dart run easy_localization:generate -S ./assets/translations -f keys -o locale_keys.g.dart -O ./lib/generated
+```
